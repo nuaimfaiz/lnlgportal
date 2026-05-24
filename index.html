@@ -2,52 +2,490 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>LUNAR LEGENDS · OBSIDIAN PORTAL</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Lunar Legends | MLBB Squad Portal</title>
+  <!-- Google Fonts & Font Awesome 6 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 20%, #0A0C12, #010103);
+      color: #EAE9F2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.15"><path fill="none" d="M0 0h800v800H0z"/><circle cx="120" cy="180" r="1.2" fill="%23D4AF37"/><circle cx="340" cy="70" r="1.5" fill="%23D4AF37"/><circle cx="620" cy="210" r="1" fill="%23D4AF37"/><circle cx="450" cy="550" r="1.8" fill="%23D4AF37"/><circle cx="750" cy="620" r="1.2" fill="%23D4AF37"/><circle cx="80" cy="650" r="1" fill="%23D4AF37"/><circle cx="540" cy="380" r="1.3" fill="%23D4AF37"/></svg>');
+      background-repeat: repeat;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .portal-container {
+      width: 100%;
+      max-width: 1400px;
+      background: rgba(8, 10, 18, 0.65);
+      backdrop-filter: blur(3px);
+      border-radius: 2.5rem;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.1) inset;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* Login panel */
+    .login-panel, .dashboard-panel {
+      padding: 2.5rem;
+    }
+    .login-card {
+      max-width: 520px;
+      margin: 1.5rem auto;
+      background: rgba(12, 14, 22, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      box-shadow: 0 20px 35px -8px black;
+    }
+    .squad-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .squad-logo i {
+      font-size: 3.5rem;
+      color: #E5B80B;
+      text-shadow: 0 0 8px rgba(229,184,11,0.6);
+      background: #151A21;
+      padding: 1rem;
+      border-radius: 3rem;
+      box-shadow: 0 0 12px rgba(212,175,55,0.3);
+    }
+    .squad-logo h1 {
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #F9E3A0, #D4AF37);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-top: 1rem;
+    }
+    .squad-logo p {
+      color: #C5C3D0;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #D4AF37;
+    }
+    .input-group input {
+      background: #0D0F17;
+      border: 1.5px solid #2F2E3A;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      color: #F0EEDF;
+      font-size: 1rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .input-group input:focus {
+      border-color: #E5B80B;
+      box-shadow: 0 0 0 3px rgba(229,184,11,0.2);
+    }
+    .gold-btn {
+      background: linear-gradient(95deg, #B88F1A, #E5B80B);
+      border: none;
+      padding: 1rem;
+      width: 100%;
+      border-radius: 2rem;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #0B0C12;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 0.8rem;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .gold-btn:hover {
+      background: linear-gradient(95deg, #D4AF37, #F9D362);
+      transform: scale(0.98);
+      box-shadow: 0 2px 6px black;
+    }
+    .error-message {
+      background: rgba(220, 53, 69, 0.2);
+      border-left: 4px solid #D9534F;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+      color: #F9B5A8;
+    }
+    .info-credentials {
+      margin-top: 2rem;
+      background: #090c14c9;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      text-align: center;
+      font-size: 0.75rem;
+      border: 1px dashed #D4AF3740;
+      color: #b9b3cf;
+    }
+    /* Dashboard grid */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+    }
+    .welcome-area h2 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      background: linear-gradient(130deg, #fff5e0, #E5B80B);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .welcome-area p {
+      color: #CAC7DD;
+      font-size: 0.95rem;
+      margin-top: 0.3rem;
+    }
+    .logout-btn {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #D4AF37;
+      padding: 0.6rem 1.6rem;
+      border-radius: 2rem;
+      color: #F5D98F;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.95rem;
+    }
+    .logout-btn:hover {
+      background: #D4AF37;
+      color: #0A0C12;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .info-card {
+      background: rgba(16, 18, 26, 0.8);
+      backdrop-filter: blur(6px);
+      border-radius: 1.8rem;
+      padding: 1.8rem;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      transition: transform 0.2s, border-color 0.2s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .info-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212, 175, 55, 0.7);
+    }
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      border-left: 4px solid #E5B80B;
+      padding-left: 1rem;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.8rem 0;
+      font-size: 0.95rem;
+    }
+    .progress-bar-bg {
+      background: #252A36;
+      border-radius: 1rem;
+      height: 10px;
+      overflow: hidden;
+      margin: 10px 0 12px 0;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #E5B80B, #F9D362);
+      width: 0%;
+      height: 100%;
+      border-radius: 1rem;
+    }
+    .badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .badge {
+      background: #232635;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #F3D382;
+      border: 1px solid #D4AF37;
+    }
+    .member-motto {
+      font-style: italic;
+      color: #E0D5B5;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      border-top: 1px dashed #444;
+      padding-top: 1rem;
+    }
+    .objective-box {
+      background: rgba(0,0,0,0.5);
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      margin-top: 0.5rem;
+    }
+    hr {
+      border-color: #2c2f3e;
+      margin: 1rem 0;
+    }
+    .tournament-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0.5rem;
+    }
+    .tournament-list li {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    .profile-detail {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #2c2e3f;
+      padding: 0.6rem 0;
+    }
+    .profile-detail strong {
+      color: #e5b80b;
+      font-weight: 600;
+    }
+    .private-link {
+      color: #e5b80b;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .private-link:hover {
+      text-decoration: underline;
+    }
+    .favourite-tag {
+      background: #232635;
+      padding: 0.2rem 0.7rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin: 0.2rem;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+    @media (max-width: 760px) {
+      body { padding: 1rem; }
+      .login-card { padding: 1.5rem; }
+      .dashboard-grid { gap: 1.5rem; }
+      .info-card { padding: 1.2rem; }
+    }
+  </style>
 </head>
 <body>
-  <div class="stars" id="starfield"></div>
-  <div class="portal-container" id="app">
-    <!-- Login view -->
-    <div id="loginView" class="view">
-      <div class="login-card">
-        <div class="logo">
-          <i class="fas fa-moon"></i>
-          <h1>LUNAR LEGENDS</h1>
-          <p>◈ Wolf & Crescent · Deep Obsidian / Aureolin Gold ◈</p>
+<div class="portal-container" id="portalRoot">
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" class="login-panel">
+    <div class="login-card">
+      <div class="squad-logo">
+        <i class="fas fa-moon"></i>
+        <h1>LUNAR LEGENDS</h1>
+        <p>◈ MLBB Squad · Wolf & Crescent ◈</p>
+      </div>
+      <form id="loginForm">
+        <div class="input-group">
+          <label><i class="fas fa-user-astronaut"></i> CALLSIGN</label>
+          <input type="text" id="username" placeholder="LunarWarden / StellarFlare / ShadowLynx / Aurelius" autocomplete="off">
         </div>
-        <form id="loginForm">
-          <div class="input-group">
-            <label><i class="fas fa-user-astronaut"></i> CALLSIGN</label>
-            <input type="text" id="loginUsername" placeholder="e.g., LunarWarden" autocomplete="off">
-          </div>
-          <div class="input-group">
-            <label><i class="fas fa-key"></i> ACCESS CODE</label>
-            <input type="password" id="loginPassword" placeholder="••••••••">
-          </div>
-          <button type="submit" class="gold-btn"><i class="fas fa-arrow-right-to-bracket"></i> ENTER NEXUS</button>
-          <div id="loginError" class="error-message"></div>
-        </form>
-        <div class="demo-hint">
-          <i class="fas fa-shield-alt"></i> Authorised legends (15 members)<br>
-          <span>LunarWarden / goldenkey</span> | <span>StellarFlare / cometblaze</span> | <span>ShadowLynx / nightsprint</span> | <span>Aurelius / goldenflame</span> ... and 11 more.
+        <div class="input-group">
+          <label><i class="fas fa-key"></i> ACCESS CODE</label>
+          <input type="password" id="password" placeholder="••••••••">
         </div>
+        <button type="submit" class="gold-btn"><i class="fas fa-arrow-right-to-bracket"></i> ENTER PORTAL</button>
+        <div id="loginError" class="error-message" style="display: none;"></div>
+      </form>
+      <div class="info-credentials">
+        <i class="fas fa-shield-alt"></i> 15 MLBB Legends · Hardcoded credentials<br>
+        <span style="font-family: monospace;">LunarWarden / goldenkey &nbsp;|&nbsp; StellarFlare / cometblaze &nbsp;|&nbsp; ShadowLynx / nightsprint &nbsp;|&nbsp; Aurelius / goldenflame</span>
+        <span style="font-size:0.7rem;">+ 11 more (FrostHowl, EmberClaw, Nightshade, StormCrest, IronMane, MysticEcho, VenomStrike, CrimsonMoon, SilverPaw, DuskWalker, RuneWolf)</span>
       </div>
     </div>
-
-    <!-- Dashboard view -->
-    <div id="dashboardView" class="view" style="display: none;">
-      <div class="dashboard-layout">
-        <aside class="sidebar" id="sidebar"></aside>
-        <main class="main-content" id="mainContent"></main>
-      </div>
-      <footer>LNLG • Wolf's Howl • Crescent Seal v4.0</footer>
-    </div>
+    <footer>LNLG • Deep Obsidian • Mobile Legends Squad Portal</footer>
   </div>
-  <script type="module" src="js/main.js"></script>
+
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboardSection" class="dashboard-panel" style="display: none;">
+    <div class="dashboard-header">
+      <div class="welcome-area">
+        <h2 id="dashboardGreeting">Lunar Operator</h2>
+        <p id="dashboardRankRole">⚡ MLBB Squad Dashboard ⚡</p>
+      </div>
+      <button id="logoutButton" class="logout-btn"><i class="fas fa-sign-out-alt"></i> EXIT PORTAL</button>
+    </div>
+    <div id="dynamicDashboardContent" class="dashboard-grid"></div>
+    <footer>◈ LUNAR LEGENDS — MLBB · Rank Push · Land of Dawn ◈</footer>
+  </div>
+</div>
+
+<script>
+  // 15 MEMBERS – full data, MLBB themed
+  const MEMBERS = [
+    { username: "LunarWarden", password: "goldenkey", profile: { fullName: "Cdr. Kaelen 'Voidcaller' Ashford", role: "Leader", highestRank: "Mythical Glory", favoriteHeroes: ["Lunox", "Selena", "Hayabusa"], favoriteLanes: ["Mid", "Jungle"], privateProfileLink: "https://lunarlegends.gg/warden", avatarIcon: "fa-crown", quote: "Control the map, control the game.", joined: "Season 1 · Founder", reputation: "LEGENDARY", lunarCredits: 87400, missionsComplete: 147 }, stats: { burst: 94, teamfight: 99, durability: 88, mobility: 92 }, achievements: ["Mythical Glory 50⭐", "Local Tournament Winner", "Squad Commander"], tournamentsWon: ["MLBB Lunar Cup 2024", "Obsidian Gauntlet", "Crescent Clash"], squadLeaderboardPosition: 1, activeMission: "Push to 100⭐ this season", specialties: ["Lunox God", "Invade Meta"], recentMatches: ["Carry 12/0/7 MVP", "Lord steal + Savage", "Tower dive triple kill"], progressToNextRank: 78, crescentBlessing: "Lunar Totem · Level 9" },
+    { username: "Aurelius", password: "goldenflame", profile: { fullName: "Darius 'Aurelius' Sol", role: "Leader", highestRank: "Mythical Immortal", favoriteHeroes: ["Yu Zhong", "Uranus", "Alice"], favoriteLanes: ["Exp", "Roam"], privateProfileLink: "https://lunarlegends.gg/aurelius", avatarIcon: "fa-dragon", quote: "Exp lane is my kingdom.", joined: "Pre-season", reputation: "MYTHIC IMMORTAL", lunarCredits: 158200, missionsComplete: 312 }, stats: { burst: 88, teamfight: 100, durability: 99, mobility: 86 }, achievements: ["Global Top 100 Yu Zhong", "MCL Champion x5", "Undefeated Scrims"], tournamentsWon: ["Primordial Cup", "Golden Era Invitational", "Crescent Crown"], squadLeaderboardPosition: 2, activeMission: "Win MDL qualifiers", specialties: ["Split Push God", "Unkillable Offlaner"], recentMatches: ["1v3 defense", "Zoned 4 enemies", "Game-winning TP"], progressToNextRank: 100, crescentBlessing: "Aureolin Immortal" },
+    { username: "StellarFlare", password: "cometblaze", profile: { fullName: "Lyra 'Solar Flare' Chen", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Xavier", "Pharsa", "Kagura"], favoriteLanes: ["Mid", "Gold"], privateProfileLink: "https://lunarlegends.gg/stellarflare", avatarIcon: "fa-sun", quote: "Positioning wins fights.", joined: "Season 3", reputation: "RADIANT", lunarCredits: 48700, missionsComplete: 89 }, stats: { burst: 97, teamfight: 91, durability: 70, mobility: 88 }, achievements: ["Mythic 5x", "Mega Kill Master"], tournamentsWon: ["Helios Championship"], squadLeaderboardPosition: 3, activeMission: "Improve team rotation", specialties: ["Long range poke", "Zone control"], recentMatches: ["18/3/10 Xavier", "Savaged the turtle fight"], progressToNextRank: 45, crescentBlessing: "Crescent Spark · Level 6" },
+    { username: "ShadowLynx", password: "nightsprint", profile: { fullName: "Riven 'Shadowstrike' Moroz", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Natalia", "Helcurt", "Lancelot"], favoriteLanes: ["Jungle", "Roam"], privateProfileLink: "https://lunarlegends.gg/shadowlynx", avatarIcon: "fa-paw", quote: "Invisibility = victory.", joined: "Season 4", reputation: "ELUSIVE", lunarCredits: 29300, missionsComplete: 77 }, stats: { burst: 99, teamfight: 82, durability: 65, mobility: 98 }, achievements: ["Assassin God", "15 win streak"], tournamentsWon: ["Stealth Masters", "Midnight Rumble"], squadLeaderboardPosition: 4, activeMission: "Steal enemy buffs every game", specialties: ["Backline snipe", "Invade specialist"], recentMatches: ["Quad kill as Natalia", "Stole Lord with retri"], progressToNextRank: 62, crescentBlessing: "Noctis Shroud · Level 7" },
+    { username: "FrostHowl", password: "icewolf", profile: { fullName: "Bjorn 'Frostfang' Ironclaw", role: "Member", highestRank: "Legend", favoriteHeroes: ["Khaleed", "Terizla", "Gatotkaca"], favoriteLanes: ["Exp", "Roam"], privateProfileLink: "#", avatarIcon: "fa-wolf-pack-battalion", quote: "Freeze the lane, freeze the enemy.", joined: "Season 5", reputation: "FROSTBORN", lunarCredits: 21000, missionsComplete: 48 }, stats: { burst: 78, teamfight: 85, durability: 95, mobility: 72 }, achievements: ["Tank main", "Peel master"], tournamentsWon: ["Winter's Grasp"], squadLeaderboardPosition: 5, activeMission: "Improve set-up engages", specialties: ["Frontline tank", "CC chain"], recentMatches: ["5-man taunt", "Saved carry 4 times"], progressToNextRank: 30, crescentBlessing: "Frozen Crescent · Level 4" },
+    { username: "EmberClaw", password: "firehowl", profile: { fullName: "Sera 'Ember' Volkov", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Karina", "Aamon", "Gusion"], favoriteLanes: ["Jungle", "Mid"], privateProfileLink: "#", avatarIcon: "fa-fire", quote: "Burst and vanish.", joined: "Season 6", reputation: "ASHEN", lunarCredits: 18900, missionsComplete: 44 }, stats: { burst: 98, teamfight: 70, durability: 68, mobility: 96 }, achievements: ["Gusion main 200 matches"], tournamentsWon: ["Blazing Duel"], squadLeaderboardPosition: 6, activeMission: "Master hyper-carry rotation", specialties: ["Reset assassin", "Solo invade"], recentMatches: ["14 kills under 10 min", "Savage with Karina"], progressToNextRank: 28, crescentBlessing: "Ember Crescent · Level 5" },
+    { username: "Nightshade", password: "poisonivy", profile: { fullName: "Morwen 'Nightshade' Vex", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Selena", "Valentina", "Chou"], favoriteLanes: ["Roam", "Mid"], privateProfileLink: "#", avatarIcon: "fa-skull", quote: "Surprise is my weapon.", joined: "Season 5", reputation: "SHADOW", lunarCredits: 16700, missionsComplete: 61 }, stats: { burst: 96, teamfight: 88, durability: 71, mobility: 94 }, achievements: ["Selena arrow god", "Roamer of the month"], tournamentsWon: ["Venom Cup"], squadLeaderboardPosition: 7, activeMission: "Global presence as roamer", specialties: ["Pick-off artist", "Vision control"], recentMatches: ["12 arrows hit", "Enemy tilt early game"], progressToNextRank: 55, crescentBlessing: "Nocturnal Fang · Level 5" },
+    { username: "StormCrest", password: "thunderwolf", profile: { fullName: "Ragnar 'Storm' Ironhide", role: "Member", highestRank: "Legend", favoriteHeroes: ["Jawhead", "Badang", "Minsitthar"], favoriteLanes: ["Exp", "Roam"], privateProfileLink: "#", avatarIcon: "fa-cloud-bolt", quote: "Disruption is key.", joined: "Season 4", reputation: "TEMPEST", lunarCredits: 23400, missionsComplete: 66 }, stats: { burst: 81, teamfight: 87, durability: 86, mobility: 84 }, achievements: ["Crowd control expert"], tournamentsWon: ["Thunderdome"], squadLeaderboardPosition: 8, activeMission: "Peel for carries", specialties: ["Counter-initiator"], recentMatches: ["Threw enemy into tower", "Saved turtle with ult"], progressToNextRank: 48, crescentBlessing: "Storm Crescent · Level 6" },
+    { username: "IronMane", password: "shieldwolf", profile: { fullName: "Greta 'Iron' Stonewall", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Belerick", "Hylos", "Franco"], favoriteLanes: ["Roam", "Exp"], privateProfileLink: "#", avatarIcon: "fa-shield-halbed", quote: "I'll die for the team.", joined: "Season 3", reputation: "IRONWILL", lunarCredits: 31200, missionsComplete: 95 }, stats: { burst: 70, teamfight: 92, durability: 99, mobility: 70 }, achievements: ["Franco hook master", "Tank MVP"], tournamentsWon: ["Shield Slam"], squadLeaderboardPosition: 9, activeMission: "Practice flicker hooks", specialties: ["Set-up tank"], recentMatches: ["5-man Franco hook", "Absorbed 80k damage"], progressToNextRank: 71, crescentBlessing: "Iron Crescent · Level 6" },
+    { username: "MysticEcho", password: "songofmoon", profile: { fullName: "Lyriel 'Echo' Moonsong", role: "Member", highestRank: "Legend", favoriteHeroes: ["Rafaela", "Estes", "Angela"], favoriteLanes: ["Roam", "Mid"], privateProfileLink: "#", avatarIcon: "fa-music", quote: "Healing wins wars.", joined: "Season 5", reputation: "MELODIC", lunarCredits: 14500, missionsComplete: 42 }, stats: { burst: 74, teamfight: 95, durability: 78, mobility: 82 }, achievements: ["Heal mastery", "Support main"], tournamentsWon: ["Harmony Clash"], squadLeaderboardPosition: 10, activeMission: "Improve rotation timing", specialties: ["Sustain support"], recentMatches: ["Saved team from wipe", "100k healing"], progressToNextRank: 22, crescentBlessing: "Melodic Crescent · Level 3" },
+    { username: "VenomStrike", password: "serpentfang", profile: { fullName: "Zephyr 'Venom' Nox", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Hanzo", "Ling", "Fanny"], favoriteLanes: ["Jungle"], privateProfileLink: "#", avatarIcon: "fa-snake", quote: "Toxic gameplay.", joined: "Season 6", reputation: "VENOMOUS", lunarCredits: 13200, missionsComplete: 47 }, stats: { burst: 97, teamfight: 78, durability: 69, mobility: 99 }, achievements: ["Fanny 2 cables", "Jungle diff"], tournamentsWon: ["Serpent Cup"], squadLeaderboardPosition: 11, activeMission: "Master Ling's dashes", specialties: ["Hyper carry"], recentMatches: ["14/0/5 Fanny", "Invaded red buff every game"], progressToNextRank: 37, crescentBlessing: "Venom Crescent · Level 4" },
+    { username: "CrimsonMoon", password: "bloodhowl", profile: { fullName: "Vlad 'Crimson' Dusk", role: "Leader", highestRank: "Mythical Glory", favoriteHeroes: ["Alice", "Esmeralda", "Ruby"], favoriteLanes: ["Exp", "Mid"], privateProfileLink: "#", avatarIcon: "fa-moon", quote: "Life steal is real.", joined: "Season 2", reputation: "BLOODBORN", lunarCredits: 56700, missionsComplete: 121 }, stats: { burst: 93, teamfight: 89, durability: 94, mobility: 87 }, achievements: ["Global Alice", "Solo carry"], tournamentsWon: ["Crimson Gauntlet", "Blood Rite"], squadLeaderboardPosition: 2, activeMission: "Reach Mythical Immortal", specialties: ["Drain tank"], recentMatches: ["1v4 maniac", "Sustained 5 enemies"], progressToNextRank: 83, crescentBlessing: "Blood Crescent · Level 8" },
+    { username: "SilverPaw", password: "silverwolf", profile: { fullName: "Luna 'Silver' Grey", role: "Member", highestRank: "Legend", favoriteHeroes: ["Wanwan", "Claude", "Brody"], favoriteLanes: ["Gold"], privateProfileLink: "#", avatarIcon: "fa-paw", quote: "Kite and kill.", joined: "Season 5", reputation: "SILVER", lunarCredits: 19500, missionsComplete: 62 }, stats: { burst: 90, teamfight: 80, durability: 68, mobility: 95 }, achievements: ["Wanwan global", "Marksman main"], tournamentsWon: ["Silver Stride"], squadLeaderboardPosition: 12, activeMission: "Improve positioning", specialties: ["Late game insurance"], recentMatches: ["Triple kill with Claude dash", "0 death MVP"], progressToNextRank: 41, crescentBlessing: "Silver Crescent · Level 5" },
+    { username: "DuskWalker", password: "twilight", profile: { fullName: "Orin 'Dusk' Shadowalker", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Gusion", "Harley", "Lancelot"], favoriteLanes: ["Jungle", "Mid"], privateProfileLink: "#", avatarIcon: "fa-eye", quote: "Twilight ganks.", joined: "Season 4", reputation: "TWILIGHT", lunarCredits: 22300, missionsComplete: 67 }, stats: { burst: 92, teamfight: 84, durability: 71, mobility: 94 }, achievements: ["Gusion combo master"], tournamentsWon: ["Dusk Duel"], squadLeaderboardPosition: 13, activeMission: "Practice Harley's return", specialties: ["Pick-off"], recentMatches: ["Quad kill Gusion", "Stole Lord with dagger"], progressToNextRank: 53, crescentBlessing: "Dusk Crescent · Level 5" },
+    { username: "RuneWolf", password: "runic", profile: { fullName: "Elder Rune 'Runeweaver'", role: "Member", highestRank: "Mythic", favoriteHeroes: ["Yve", "Valir", "Pharsa"], favoriteLanes: ["Mid", "Roam"], privateProfileLink: "#", avatarIcon: "fa-scroll", quote: "Runes control the battle.", joined: "Season 3", reputation: "RUNIC", lunarCredits: 26400, missionsComplete: 81 }, stats: { burst: 76, teamfight: 97, durability: 81, mobility: 88 }, achievements: ["Mage God", "Area control"], tournamentsWon: ["Runic Convergence"], squadLeaderboardPosition: 14, activeMission: "Learn new rotation", specialties: ["Zone mage"], recentMatches: ["10/2/15 Yve", "Stunned entire team"], progressToNextRank: 59, crescentBlessing: "Runic Crescent · Level 6" }
+  ];
+
+  const userMap = new Map(); MEMBERS.forEach(m => userMap.set(m.username, m));
+  function getMemberByUsername(username) { return userMap.get(username) || null; }
+  function validateCredentials(username, password) { const m = getMemberByUsername(username); return (m && m.password === password) ? m : null; }
+
+  // Render dashboard – new order: 1. Full Profile, 2. Profile & Rank, 3. MLBB Battle Stats, 4. Tournaments/Achievements, 5. Active + Rank Progress + Recent Matches
+  function renderDashboard(member) {
+    if (!member) return;
+    const p = member.profile;
+    document.getElementById('dashboardGreeting').innerHTML = `<i class="fas ${p.avatarIcon}"></i> ${p.fullName} · [${p.role}]`;
+    document.getElementById('dashboardRankRole').innerHTML = `<i class="fas fa-tag"></i> ${p.role} | ${p.highestRank} | LNLG ID: ${member.username}`;
+
+    const stats = member.stats;
+    // Card 1: Full Profile
+    const favHeroes = p.favoriteHeroes.map(h => `<span class="favourite-tag">${h}</span>`).join('');
+    const favLanes = p.favoriteLanes.map(l => `<span class="favourite-tag">${l}</span>`).join('');
+    const fullProfileCard = `
+      <div class="info-card">
+        <div class="card-title"><i class="fas fa-id-card"></i> FULL PROFILE</div>
+        <div class="profile-detail"><strong>Full Name:</strong> ${p.fullName}</div>
+        <div class="profile-detail"><strong>Role:</strong> ${p.role}</div>
+        <div class="profile-detail"><strong>Highest Rank:</strong> ${p.highestRank}</div>
+        <div class="profile-detail"><strong>Favourite Heroes:</strong> ${favHeroes}</div>
+        <div class="profile-detail"><strong>Favourite Lanes:</strong> ${favLanes}</div>
+        <div class="profile-detail"><strong>Private Profile:</strong> <a href="${p.privateProfileLink}" target="_blank" class="private-link">${p.privateProfileLink !== "#" ? p.privateProfileLink : "Not shared"}</a></div>
+        <div class="member-motto"><i class="fas fa-wolf-pack-battalion"></i> Wolf & Crescent · ${p.joined}</div>
+      </div>
+    `;
+    // Card 2: Profile & Rank
+    const profileRankCard = `
+      <div class="info-card">
+        <div class="card-title"><i class="fas fa-user-astronaut"></i> PROFILE & RANK</div>
+        <div class="stat-row"><span><i class="fas fa-trophy"></i> Squad Leaderboard:</span><span style="color:#E5B80B;">#${member.squadLeaderboardPosition}</span></div>
+        <div class="stat-row"><span><i class="fas fa-users"></i> Role:</span><span>${p.role}</span></div>
+        <div class="stat-row"><span><i class="fas fa-chart-simple"></i> Highest Rank:</span><span>${p.highestRank}</span></div>
+        <div class="stat-row"><span><i class="fas fa-medal"></i> Reputation:</span><span>${p.reputation}</span></div>
+        <div class="stat-row"><span><i class="fas fa-coins"></i> Lunar Credits (BP):</span><span>${p.lunarCredits.toLocaleString()}</span></div>
+        <div class="member-motto"><i class="fas fa-quote-left"></i> ${p.quote}</div>
+      </div>
+    `;
+    // Card 3: MLBB Battle Stats (renamed)
+    const battleStatsCard = `
+      <div class="info-card">
+        <div class="card-title"><i class="fas fa-chart-line"></i> MLBB BATTLE STATS</div>
+        <div class="skill-stats">
+          <div class="stat-row"><span>💥 Burst Damage</span><span>${stats.burst}%</span></div><div class="progress-bar-bg"><div class="progress-fill" style="width: ${stats.burst}%;"></div></div>
+          <div class="stat-row"><span>🤝 Team Fight</span><span>${stats.teamfight}%</span></div><div class="progress-bar-bg"><div class="progress-fill" style="width: ${stats.teamfight}%;"></div></div>
+          <div class="stat-row"><span>🛡️ Durability</span><span>${stats.durability}%</span></div><div class="progress-bar-bg"><div class="progress-fill" style="width: ${stats.durability}%;"></div></div>
+          <div class="stat-row"><span>⚡ Mobility</span><span>${stats.mobility}%</span></div><div class="progress-bar-bg"><div class="progress-fill" style="width: ${stats.mobility}%;"></div></div>
+        </div>
+        <hr>
+        <div class="stat-row"><span><i class="fas fa-star-of-life"></i> Crescent Blessing:</span><span>${member.crescentBlessing}</span></div>
+        <div class="stat-row"><span><i class="fas fa-gem"></i> Signature Skill:</span><span>${member.specialties[0]}</span></div>
+      </div>
+    `;
+    // Card 4: Tournaments & Achievements
+    const tournamentsHtml = member.tournamentsWon.map(t => `<li><i class="fas fa-trophy gold-text"></i> ${t}</li>`).join('');
+    const achievementsHtml = member.achievements.map(a => `<span class="badge"><i class="fas fa-medal"></i> ${a}</span>`).join('');
+    const tourneyCard = `
+      <div class="info-card">
+        <div class="card-title"><i class="fas fa-trophy"></i> TOURNAMENTS & EVENTS WON</div>
+        <ul class="tournament-list">${tournamentsHtml || '<li>No tournaments yet</li>'}</ul>
+        <div class="card-title" style="margin-top:1.2rem;"><i class="fas fa-medal"></i> ACHIEVEMENTS</div>
+        <div class="badge-list">${achievementsHtml}</div>
+      </div>
+    `;
+    // Card 5: Active Directive / Rank Progress / Recent Matches (MLBB style)
+    const activeCard = `
+      <div class="info-card">
+        <div class="card-title"><i class="fas fa-bullseye"></i> CURRENT MLBB OBJECTIVE</div>
+        <div class="objective-box">${member.activeMission}</div>
+        <div class="card-title" style="margin-top:1.2rem;"><i class="fas fa-chart-simple"></i> SEASON RANK PUSH</div>
+        <div class="stat-row"><span>Progress to next rank:</span><span>${member.progressToNextRank}%</span></div>
+        <div class="progress-bar-bg"><div class="progress-fill" style="width: ${member.progressToNextRank}%;"></div></div>
+        <div class="card-title" style="margin-top:1.2rem;"><i class="fas fa-history"></i> RECENT MATCHES / HIGHLIGHTS</div>
+        <ul style="list-style:none; padding-left:0;">${member.recentMatches.map(match => `<li><i class="fas fa-caret-right gold-text"></i> ${match}</li>`).join('')}</ul>
+      </div>
+    `;
+
+    document.getElementById('dynamicDashboardContent').innerHTML = fullProfileCard + profileRankCard + battleStatsCard + tourneyCard + activeCard;
+  }
+
+  // Session handling (same as before)
+  function getCurrentSessionUser() { const stored = sessionStorage.getItem('lnlg_active_user'); if (stored) { try { const parsed = JSON.parse(stored); if (parsed && parsed.username && getMemberByUsername(parsed.username)) return parsed.username; } catch(e) {} } return null; }
+  function setSessionUser(username) { sessionStorage.setItem('lnlg_active_user', JSON.stringify({ username, timestamp: Date.now() })); }
+  function clearSession() { sessionStorage.removeItem('lnlg_active_user'); }
+  function showLoginView() { document.getElementById('loginSection').style.display = 'block'; document.getElementById('dashboardSection').style.display = 'none'; clearSession(); document.getElementById('loginError').style.display = 'none'; document.getElementById('username').value = ''; document.getElementById('password').value = ''; }
+  function showDashboardViewForUser(username) { const member = getMemberByUsername(username); if (!member) { showLoginView(); return false; } renderDashboard(member); document.getElementById('loginSection').style.display = 'none'; document.getElementById('dashboardSection').style.display = 'block'; return true; }
+  function attemptLogin(username, password) { const validMember = validateCredentials(username, password); if (validMember) { setSessionUser(validMember.username); showDashboardViewForUser(validMember.username); return true; } else { const errDiv = document.getElementById('loginError'); errDiv.style.display = 'block'; errDiv.innerHTML = '<i class="fas fa-skull-crosswalk"></i> Access Denied — Invalid callsign or access code.'; return false; } }
+  function restoreSession() { const sessionUser = getCurrentSessionUser(); if (sessionUser && getMemberByUsername(sessionUser)) { showDashboardViewForUser(sessionUser); return true; } else { showLoginView(); return false; } }
+
+  document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); const username = document.getElementById('username').value.trim(); const password = document.getElementById('password').value; if (!username || !password) { const errDiv = document.getElementById('loginError'); errDiv.style.display = 'block'; errDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Enter both callsign and access code.'; return; } attemptLogin(username, password); });
+  document.getElementById('logoutButton').addEventListener('click', () => { clearSession(); showLoginView(); });
+  window.addEventListener('load', () => { restoreSession(); });
+</script>
 </body>
 </html>
