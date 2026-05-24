@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>LUNAR LEGENDS · OBSIDIAN PORTAL</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="stars" id="starfield"></div>
+  <div class="portal-container" id="app">
+    <!-- Login view -->
+    <div id="loginView" class="view">
+      <div class="login-card">
+        <div class="logo">
+          <i class="fas fa-moon"></i>
+          <h1>LUNAR LEGENDS</h1>
+          <p>◈ Wolf & Crescent · Deep Obsidian / Aureolin Gold ◈</p>
+        </div>
+        <form id="loginForm">
+          <div class="input-group">
+            <label><i class="fas fa-user-astronaut"></i> CALLSIGN</label>
+            <input type="text" id="loginUsername" placeholder="e.g., LunarWarden" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-key"></i> ACCESS CODE</label>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+          <button type="submit" class="gold-btn"><i class="fas fa-arrow-right-to-bracket"></i> ENTER NEXUS</button>
+          <div id="loginError" class="error-message"></div>
+        </form>
+        <div class="demo-hint">
+          <i class="fas fa-shield-alt"></i> Authorised legends (15 members)<br>
+          <span>LunarWarden / goldenkey</span> | <span>StellarFlare / cometblaze</span> | <span>ShadowLynx / nightsprint</span> | <span>Aurelius / goldenflame</span> ... and 11 more.
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard view -->
+    <div id="dashboardView" class="view" style="display: none;">
+      <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+      </div>
+      <footer>LNLG • Wolf's Howl • Crescent Seal v4.0</footer>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
